@@ -1,3 +1,4 @@
+git clone https://github.com/koopjs/koop.git
 cp package.json koop/
 cp main.js koop/
 cp custom.js koop/
