@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - shell: sudo apt-get update
+    - shell: sudo apt-get install npm
+    - shell: sudo apt-get install nodejs
+    - shell: sudo apt-get install nodejs-legacy
+    - shell: sudo apt-get install git
+    - shell: git clone https://github.com/akhan7/HW3_M3.git
+    - shell: cp -r HW3_M3/* .
+    - shell: npm install
+    - shell: redis-server &
+    - shell: node main.js 3000
+    - shell: node proxy.js
