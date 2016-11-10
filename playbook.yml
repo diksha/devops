@@ -12,4 +12,5 @@
     - shell: node monitor.js &
     - shell: redis-server &
     - shell: node main.js 3000 &
+    - shell: echo "Will run proxy"
     - shell: node proxy.js &
