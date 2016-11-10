@@ -11,6 +11,7 @@ var os   = require("os");
 var fs = require('fs');
 var config = {};
 config.token = "a9e1815cbd9fca7e49a988dca69f438251dcd12036d668df3075b9b293c3d773"
+var client1 = redis.createClient(6379, '127.0.0.1', {})
 
 var headers =
 {
@@ -74,7 +75,8 @@ function creatingDroplet() {
 
 			fs.writeFile('inventory', "[digitalocean]" + "\n" + "node0 ansible_ssh_host="+data.droplet.networks.v4[0].ip_address + " ansible_ssh_user=root ansible_become=root ansible_ssh_key=/root/.ssh/id_rsa\n" , function (err) {
 			if (err) return console.log(err);
-			client.lpush("proxyQueue", "http://" + data.droplet.networks.v4[0].ip_address + ":3000");
+			console.log("http://" + data.droplet.networks.v4[0].ip_address + ":3000");
+			client1.lpush("serverList", "http://" + data.droplet.networks.v4[0].ip_address + ":3000");
 				cmd.get(
 					'./playbook.sh',
 					function(data){
