@@ -52,5 +52,27 @@ setInterval( function ()
 			i = false;
 		}
 	};
+	if (cpuLoad > 50) {
+		console.log("cpu over utilized!!!");
+		if(i){
+			var mailOptions = {
+			from: 'totran123@gmail.com', // sender address
+                	to: 'totran123@gmail.com', // list of receivers
+                	subject: 'Alert: CPU Utilization high!!', // Subject line
+                	text: 'The cpu utilization on one of your droplets is too high! Please review.', // plaintext body
+                	html: '<b>The cpu utilization on one of your droplets is too high! Please review.</b>' // html bo
+			};
+			// send mail with defined transport object
+                	transporter.sendMail(mailOptions, function(error, info){
+                	if(error){
+                        	return console.log(error);
+                	}
+                	console.log('Message sent: ' + info.response);
+                	});
+		
+		//	window.open('mailto:totran123@gmail.com?subject=alert&body=alert');	
+			i = false;
+		}
+	};
 
 }, 2000);
