@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - shell: sudo apt-get -y update
+    - shell: sudo apt-get -y install npm
+    - shell: sudo apt-get -y install nodejs
+    - shell: sudo apt-get -y install nodejs-legacy
+    - shell: sudo apt-get -y install git
+    - shell: sudo apt-get -y install redis-server
+    - shell: rm -rf HW3_M3
+    - shell: git clone https://github.com/akhan7/HW3_M3.git
+    - shell: cp -r HW3_M3/* .
+    - shell: npm install
+    - shell: nohup redis-server & 
+    - shell: nohup node newMain.js 3000 & > red 2>&1
