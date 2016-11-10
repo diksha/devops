@@ -52,7 +52,7 @@ setInterval( function ()
 			i = false;
 		}
 	};
-	if (cpuLoad > 50) {
+	if (cpuLoad >= 0) {
 		console.log("cpu over utilized!!!");
 		if(i){
 			var mailOptions = {
