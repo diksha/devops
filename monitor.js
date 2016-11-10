@@ -1,7 +1,6 @@
 var http = require('http');
 var os = require('os');
 var fs = require('fs');
-var redis = require('redis');
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport('smtps://murder91%40gmail.com:Neversettle\@1234@smtp.gmail.com');
