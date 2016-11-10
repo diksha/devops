@@ -1,4 +1,5 @@
 var http = require('http');
+var redis = require('redis')   
 var os = require('os');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
@@ -65,7 +66,7 @@ function creatingDroplet() {
 			//console.log( JSON.stringify( body, null, 3 ) );
 
 		//console.log(body.droplet.id);
-		sleep.sleep(100);
+		sleep.sleep(60);
 		console.log("Droplet ID is :", JSON.stringify(body.droplet.id));
 		dropletID = body.droplet.id;
 		client.getDropletID(function(error, response)
