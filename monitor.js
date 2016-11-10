@@ -2,11 +2,15 @@ var http = require('http');
 var os = require('os');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
+var cmd=require('node-cmd');
 
 var sleep = require('sleep');
 var needle = require("needle");
 var os   = require("os");
 var fs = require('fs');
+var sys = require('sys')
+var exec = require('child_process').exec;
+var child;
 var config = {};
 config.token = "a9e1815cbd9fca7e49a988dca69f438251dcd12036d668df3075b9b293c3d773"
 
@@ -62,7 +66,7 @@ function creatingDroplet() {
 			//console.log( JSON.stringify( body, null, 3 ) );
 
 		//console.log(body.droplet.id);
-		sleep.sleep(5);
+		sleep.sleep(100);
 		console.log("Droplet ID is :", JSON.stringify(body.droplet.id));
 		dropletID = body.droplet.id;
 		client.getDropletID(function(error, response)
@@ -72,6 +76,12 @@ function creatingDroplet() {
 
 			fs.writeFile('inventory', "[digitalocean]" + "\n" + "node0 ansible_ssh_host="+data.droplet.networks.v4[0].ip_address + " ansible_ssh_user=root ansible_become=root ansible_ssh_key=/root/.ssh/id_rsa\n" , function (err) {
 			if (err) return console.log(err);
+				cmd.get(
+					'./playbook.sh',
+					function(data){
+					    console.log('the current working dir is : ',data)
+					}
+				    );
 
 				});
 			});
@@ -106,7 +116,7 @@ setInterval( function ()
 	var cpuLoad = cpuLoadAll();
 	console.log("Memory: ", memLoad);
 	console.log("CPU: ", cpuLoad);
-	if (memLoad > 70) {
+	if (memLoad > 20) {
 		console.log("memory over!!!");
 		if(i){
 			var mailOptions = {
