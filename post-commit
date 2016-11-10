@@ -2,10 +2,10 @@
 BRANCHNAME=$(git rev-parse --abbrev-ref HEAD)
 echo $BRANCHNAME
 if [ "$BRANCHNAME" == "master" ];then
-	curl "http://104.236.196.86:8080/job/M3-Dev/build?token=ahmad" -u "ahmad:ahmad"
+	curl "http://104.236.196.86:8080/job/M3-Dev/build?token=ahmad" -u "manasee:manasee"
 elif [ "$BRANCHNAME" == "notStable" ];then
 	echo "Inside not stable"
-	curl "http://104.236.196.86:8080/job/M3_prod/build?token=ahmad" -u "ahmad:ahmad"
+	curl "http://104.236.196.86:8080/job/M3_prod/build?token=ahmad" -u "manasee:manasee"
 fi
 
 echo "Build triggered successfully on branch: $BRANCHNAME"
