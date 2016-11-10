@@ -8,9 +8,6 @@ var sleep = require('sleep');
 var needle = require("needle");
 var os   = require("os");
 var fs = require('fs');
-var sys = require('sys')
-var exec = require('child_process').exec;
-var child;
 var config = {};
 config.token = "a9e1815cbd9fca7e49a988dca69f438251dcd12036d668df3075b9b293c3d773"
 
