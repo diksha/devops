@@ -3,6 +3,7 @@ var os = require('os');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 var cmd=require('node-cmd');
+var httpProxy = require('http-proxy')
 
 var sleep = require('sleep');
 var needle = require("needle");
@@ -73,6 +74,7 @@ function creatingDroplet() {
 
 			fs.writeFile('inventory', "[digitalocean]" + "\n" + "node0 ansible_ssh_host="+data.droplet.networks.v4[0].ip_address + " ansible_ssh_user=root ansible_become=root ansible_ssh_key=/root/.ssh/id_rsa\n" , function (err) {
 			if (err) return console.log(err);
+			client.lpush("proxyQueue", "http://" + data.droplet.networks.v4[0].ip_address + ":3000");
 				cmd.get(
 					'./playbook.sh',
 					function(data){
