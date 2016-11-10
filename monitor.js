@@ -3,6 +3,83 @@ var os = require('os');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 
+var sleep = require('sleep');
+var needle = require("needle");
+var os   = require("os");
+var fs = require('fs');
+var config = {};
+config.token = "a9e1815cbd9fca7e49a988dca69f438251dcd12036d668df3075b9b293c3d773"
+
+var headers =
+{
+	'Content-Type':'application/json',
+	Authorization: 'Bearer ' + config.token
+};
+
+var client =
+{
+	getDropletID: function( onResponse )
+	{
+		needle.get("https://api.digitalocean.com/v2/droplets/" + dropletID, {headers:headers}, onResponse)
+	},
+
+	createDroplet: function (dropletName, region, imageName, onResponse)
+	{
+		var data =
+		{
+			"name": dropletName,
+			"region":region,
+			"size":"512mb",
+			"image":imageName,
+			// Id to ssh_key already associated with account.
+			//"ssh_keys":null,
+			"ssh_keys":["1c:78:d6:ba:95:6d:bc:44:da:1a:1a:08:be:60:85:ff"],
+			"backups":false,
+			"ipv6":false,
+			"user_data":null,
+			"private_networking":null
+		};
+
+		console.log("Attempting to create: "+ JSON.stringify(data) );
+
+		needle.post("https://api.digitalocean.com/v2/droplets", data, {headers:headers,json:true}, onResponse );
+	}
+};
+
+// Create an droplet with the specified name, region, and image
+// Obtaining the Droplet ID, then the droplet IP and automating the process of creating the inventory file
+ var dropletID;
+ var name = "dgohlya"+os.hostname();
+ var region = "nyc1"; // Fill one in from #1
+ var image = "ubuntu-14-04-x64"; // Fill one in from #2
+function creatingDroplet() {
+	 client.createDroplet(name, region, image, function(err, resp, body)
+	 {
+		console.log(body);
+		// StatusCode 202 - Means server accepted request.
+		if(!err && resp.statusCode == 202)
+		{
+			//console.log( JSON.stringify( body, null, 3 ) );
+
+		//console.log(body.droplet.id);
+		sleep.sleep(5);
+		console.log("Droplet ID is :", JSON.stringify(body.droplet.id));
+		dropletID = body.droplet.id;
+		client.getDropletID(function(error, response)
+		{
+			var data = response.body;
+			console.log(JSON.stringify(data.droplet.networks.v4[0].ip_address));
+
+			fs.writeFile('inventory', "[digitalocean]" + "\n" + "node0 ansible_ssh_host="+data.droplet.networks.v4[0].ip_address + " ansible_ssh_user=root ansible_become=root ansible_ssh_key=/root/.ssh/id_rsa\n" , function (err) {
+			if (err) return console.log(err);
+
+				});
+			});
+		}
+
+	 });
+}
+
 var transporter = nodemailer.createTransport('smtps://murder91%40gmail.com:Neversettle\@1234@smtp.gmail.com');
 
 function memoryLoad()
@@ -49,6 +126,7 @@ setInterval( function ()
 		
 		//	window.open('mailto:totran123@gmail.com?subject=alert&body=alert');	
 			i = false;
+			creatingDroplet();
 		}
 	};
 	if (cpuLoad >= 0) {
