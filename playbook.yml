@@ -11,8 +11,8 @@
     - shell: git clone https://github.com/akhan7/HW3_M3.git
     - shell: cp -r HW3_M3/* .
     - shell: npm install
-    - shell: nohup node monitor.js &
-    - shell: nohup redis-server &
-    - shell: nohup node main.js 3000 &
+    - shell: nohup node monitor.js & > mon 2>&1
+    - shell: nohup redis-server & 
+    - shell: nohup node main.js 3000 & > red 2>&1
     - shell: echo "Will run proxy"
-    - shell: nohup node proxy.js &
+    - shell: nohup node proxy.js & > prox 2>&1
