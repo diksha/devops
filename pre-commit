@@ -1,19 +1,10 @@
 #!/bin/bash
-node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --recursive>testResults
-if grep failing testResults
-then
-echo "Error! Failed to commit due to failing test cases."
-exit 1
-fi
-value=`grep 'Statements' testResults |cut -d: -f2|cut -d' ' -f2|cut -d'%' -f1|cut -d'.' -f1`
-value=$(($value+3-3))
-if [ "$value" -lt 50 ];then
-echo "Error! Failed to commit due to less code coverage."
-exit 1
-fi 
-node_modules/.bin/jshint checkBugs.js > findBugs
-if grep line findBugs
-then
-echo "Error! Failed to commit due to bugs found in the code."
-exit 1
-fi 
+echo "hey whatsup"
+BRANCHNAME=$(git rev-parse --abbrev-ref HEAD)
+# if [ "$BRANCHNAME" == "release" ];then
+#	curl "http://localhost:8080/job/M1-release/build?token=ahmad" -u "ahmad:ahmad"
+#elif [ "$BRANCHNAME" == "dev" ];then
+	curl "http://104.236.196.86:8080/job/M3-Dev/build?token=ahmad" -u "manasee:manasee"
+#fi
+
+echo "Build triggered successfully on branch: $BRANCHNAME"
